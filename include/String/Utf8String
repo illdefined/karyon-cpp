@@ -1,0 +1,14 @@
+#pragma once
+#ifndef karyon_String_Utf8String
+#define karyon_String_Utf8String
+
+#include <String/String>
+
+#define UTF8STRING(const) { u8 ## const, sizeof u8 ## const - 1 }
+
+namespace String {
+	//using Utf8String = String<char>;
+	typedef String<char> Utf8String;
+}
+
+#endif

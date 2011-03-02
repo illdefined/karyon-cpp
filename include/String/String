@@ -1,0 +1,21 @@
+#pragma once
+#ifndef karyon_String_String
+#define karyon_String_String
+
+#include <restrict>
+
+namespace String {
+	template<class Type>
+	class String {
+	protected:
+		const Type* array;
+		unsigned length;
+
+	public:
+		inline String(const Type* array, unsigned length)
+			: array(array), length(length) {
+		}
+	};
+}
+
+#endif
