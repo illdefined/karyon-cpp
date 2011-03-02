@@ -16,6 +16,8 @@ namespace Integer {
 		Type value;
 
 	public:
+		typedef Type Base;
+
 		inline Integer(const Type value = Type())
 			throw ()
 			: value(value) {
