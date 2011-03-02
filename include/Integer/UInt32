@@ -1,0 +1,15 @@
+#pragma once
+#ifndef karyon_Integer_UInt32
+#define karyon_Integer_UInt32
+
+#include <Integer/Integer>
+
+namespace Integer {
+#if (defined __GNUC__ || defined __clang__) && defined __UINT32_TYPE__
+	typedef Integer<__UINT32_TYPE__> UInt32;
+#else
+	typedef Integer<unsigned int> UInt32;
+#endif
+}
+
+#endif

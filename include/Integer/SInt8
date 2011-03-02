@@ -1,0 +1,15 @@
+#pragma once
+#ifndef karyon_Integer_SInt8
+#define karyon_Integer_SInt8
+
+#include <Integer/Integer>
+
+namespace Integer {
+#if (defined __GNUC__ || defined __clang__) && defined __INT8_TYPE__
+	typedef Integer<__INT8_TYPE__> SInt8;
+#else
+	typedef Integer<signed char> SInt8;
+#endif
+}
+
+#endif
