@@ -1,0 +1,11 @@
+#pragma once
+#ifndef karyon_expect
+#define karyon_expect
+
+#if defined __GNUC__ || defined __clang__
+#	define expect(expr, value) __builtin_expect((expr), (value))
+#else
+#	define expect(expr, value) (expr)
+#endif
+
+#endif

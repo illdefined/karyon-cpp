@@ -1,0 +1,9 @@
+#pragma once
+#ifndef karyon_unlikely
+#define karyon_unlikely
+
+#include <expect>
+
+#define unlikely(expr) expect(!!(expr), 0)
+
+#endif
