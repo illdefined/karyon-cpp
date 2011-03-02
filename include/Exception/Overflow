@@ -1,0 +1,20 @@
+#pragma once
+#ifndef karyon_Exception_Overflow
+#define karyon_Exception_Overflow
+
+#include <Exception/Arithmetic>
+#include <String/Utf8String>
+
+namespace Exception {
+	class Overflow : public Arithmetic {
+	public:
+		virtual ~Overflow() {
+		}
+
+		virtual operator const String::Utf8String() {
+			return UTF8STRING("Operation result would exceed range of data type");
+		}
+	};
+}
+
+#endif

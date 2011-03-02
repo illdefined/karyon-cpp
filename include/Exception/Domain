@@ -1,0 +1,20 @@
+#pragma once
+#ifndef karyon_Exception_Domain
+#define karyon_Exception_Domain
+
+#include <Exception/Arithmetic>
+#include <String/Utf8String>
+
+namespace Exception {
+	class Domain : public Arithmetic {
+	public:
+		virtual ~Domain() {
+		}
+
+		virtual operator const String::Utf8String() {
+			return UTF8STRING("Operation is undefined for the operands given");
+		}
+	};
+}
+
+#endif

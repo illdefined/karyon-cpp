@@ -1,0 +1,20 @@
+#pragma once
+#ifndef karyon_Exception_Arithmetic
+#define karyon_Exception_Arithmetic
+
+#include <Exception/Exception>
+#include <String/Utf8String>
+
+namespace Exception {
+	class Arithmetic : public Exception {
+	public:
+		virtual ~Arithmetic() {
+		}
+
+		virtual operator const String::Utf8String() {
+			return UTF8STRING("Arithmetic error");
+		}
+	};
+}
+
+#endif

@@ -1,0 +1,16 @@
+#pragma once
+#ifndef karyon_Exception_Exception
+#define karyon_Exception_Exception
+
+#include <String/Utf8String>
+
+namespace Exception {
+	class Exception {
+	public:
+		virtual ~Exception() = 0;
+
+		virtual operator const String::Utf8String() = 0;
+	};
+}
+
+#endif

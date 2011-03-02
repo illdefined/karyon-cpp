@@ -1,0 +1,20 @@
+#pragma once
+#ifndef karyon_Exception_Underflow
+#define karyon_Exception_Underflow
+
+#include <Exception/Arithmetic>
+#include <String/Utf8String>
+
+namespace Exception {
+	class Underflow : public Arithmetic {
+	public:
+		virtual ~Underflow() {
+		}
+
+		virtual operator const String::Utf8String() {
+			return UTF8STRING("Operation result would fall below range of data type");
+		}
+	};
+}
+
+#endif
