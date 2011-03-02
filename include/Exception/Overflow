@@ -12,7 +12,7 @@ namespace Exception {
 		}
 
 		virtual operator const String::Utf8String() {
-			return UTF8STRING("Operation result would exceed range of data type");
+			return UTF8STRING("Magnitude of operation result would exceed range of data type");
 		}
 	};
 }

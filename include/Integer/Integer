@@ -4,7 +4,6 @@
 
 #include <Exception/Domain>
 #include <Exception/Overflow>
-#include <Exception/Underflow>
 
 #include <constexpr>
 #include <restrict>
@@ -45,7 +44,7 @@ namespace Integer {
 		}
 
 		inline Integer operator--(int) restrict
-			throw (Exception::Underflow) {
+			throw (Exception::Overflow) {
 			auto previous = *this;
 			*this -= Integer(1);
 			return previous;
@@ -62,12 +61,12 @@ namespace Integer {
 		}
 
 		inline Integer &operator--() restrict
-			throw (Exception::Underflow) {
+			throw (Exception::Overflow) {
 			return *this -= Integer(1);
 		}
 
 		Integer operator*(const Integer integer) const restrict
-			throw (Exception::Overflow, Exception::Underflow) {
+			throw (Exception::Overflow) {
 
 			return value * integer.value;
 		}
@@ -89,7 +88,7 @@ namespace Integer {
 		}
 
 		Integer operator+(const Integer integer) const restrict
-			throw (Exception::Overflow, Exception::Underflow) {
+			throw (Exception::Overflow) {
 
 			if (unlikely(integer.value < Type(1) ?
 				minimum() - integer.value > value :
@@ -100,7 +99,7 @@ namespace Integer {
 		}
 
 		Integer operator-(const Integer integer) const restrict
-			throw (Exception::Overflow, Exception::Underflow) {
+			throw (Exception::Overflow) {
 
 			if (unlikely(integer.value < Type(1) ?
 				maximum() + integer.value < value :
@@ -172,17 +171,17 @@ namespace Integer {
 		}
 
 		inline Integer& operator+=(const Integer integer) restrict
-			throw (Exception::Overflow, Exception::Underflow) {
+			throw (Exception::Overflow) {
 			return *this = *this + integer;
 		}
 
 		inline Integer& operator-=(const Integer integer) restrict
-			throw (Exception::Overflow, Exception::Underflow) {
+			throw (Exception::Overflow) {
 			return *this = *this - integer;
 		}
 
 		inline Integer& operator*=(const Integer integer) restrict
-			throw (Exception::Overflow, Exception::Underflow) {
+			throw (Exception::Overflow) {
 			return *this = *this * integer;
 		}
 
