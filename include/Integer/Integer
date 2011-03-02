@@ -8,6 +8,7 @@
 
 #include <constexpr>
 #include <restrict>
+#include <unlikely>
 
 namespace Integer {
 	template<class Type>
@@ -73,7 +74,7 @@ namespace Integer {
 
 		Integer operator/(const Integer integer) const restrict
 			throw (Exception::Domain) {
-			if (integer.value == Type(0))
+			if (unlikely(integer.value == Type(0)))
 				throw Exception::Domain();
 
 			return value / integer.value;
@@ -81,7 +82,7 @@ namespace Integer {
 
 		Integer operator%(const Integer integer) const restrict
 			throw (Exception::Domain) {
-			if (integer.value == Type(0))
+			if (unlikely(integer.value == Type(0)))
 				throw Exception::Domain();
 
 			return value % integer.value;
@@ -177,7 +178,7 @@ namespace Integer {
 
 		Integer& operator/=(const Integer integer) restrict
 			throw (Exception::Domain) {
-			if (integer.value == Type(0))
+			if (unlikely(integer.value == Type(0)))
 				throw Exception::Domain();
 
 			value /= integer.value;
