@@ -229,14 +229,14 @@ namespace Integer {
 			return ~Type(0) < Type(0);
 		}
 
-		static inline constexpr Integer minimum()
+		static inline constexpr Type minimum()
 			throw() {
 			return isSigned() ?
 				Type(1) << sizeof (Type) * 8 - 1 :
 				Type(0);
 		}
 
-		static inline constexpr Integer maximum()
+		static inline constexpr Type maximum()
 			throw() {
 			return isSigned() ?
 				~(Type(1) << sizeof (Type) * 8 - 1) :
