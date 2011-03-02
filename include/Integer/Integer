@@ -91,11 +91,21 @@ namespace Integer {
 		Integer operator+(const Integer integer) const restrict
 			throw (Exception::Overflow, Exception::Underflow) {
 
+			if (unlikely(integer.value < Type(1) ?
+				minimum() - integer.value > value :
+				maximum() - integer.value < value))
+				throw Exception::Overflow();
+
 			return value + integer.value;
 		}
 
 		Integer operator-(const Integer integer) const restrict
 			throw (Exception::Overflow, Exception::Underflow) {
+
+			if (unlikely(integer.value < Type(1) ?
+				maximum() + integer.value < value :
+				minimum() + integer.value > value))
+				throw Exception::Overflow();
 
 			return value - integer.value;
 		}
