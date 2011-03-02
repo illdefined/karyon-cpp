@@ -1,0 +1,11 @@
+#pragma once
+#ifndef karyon_restrict
+#define karyon_restrict
+
+#if defined __GNUC__ || defined __clang__
+#	define restrict __restrict__
+#else
+#	define restrict
+#endif
+
+#endif
