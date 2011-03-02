@@ -1,0 +1,300 @@
+#pragma once
+#ifndef karyon_Integer_Integer
+#define karyon_Integer_Integer
+
+#include <Exception/Domain>
+#include <Exception/Overflow>
+#include <Exception/Underflow>
+
+#include <constexpr>
+#include <restrict>
+
+namespace Integer {
+	template<class Type>
+	class Integer {
+	protected:
+		Type value;
+
+	public:
+		inline Integer(const Type value = Type())
+			throw ()
+			: value(value) {
+		}
+
+		inline Integer(const Integer& restrict integer)
+			throw ()
+			: value(integer.value) {
+		}
+
+		explicit inline operator Type() const restrict
+			throw () {
+			return value;
+		}
+
+		explicit inline operator bool() const restrict
+			throw () {
+			return value;
+		}
+
+		inline Integer operator++(int) restrict
+			throw (Exception::Overflow) {
+			auto previous = *this;
+			*this += Integer(1);
+			return previous;
+		}
+
+		inline Integer operator--(int) restrict
+			throw (Exception::Underflow) {
+			auto previous = *this;
+			*this -= Integer(1);
+			return previous;
+		}
+
+		inline Integer operator~() const restrict
+			throw () {
+			return ~value;
+		}
+
+		inline Integer &operator++() restrict
+			throw (Exception::Overflow) {
+			return *this += Integer(1);
+		}
+
+		inline Integer &operator--() restrict
+			throw (Exception::Underflow) {
+			return *this -= Integer(1);
+		}
+
+		Integer operator*(const Integer integer) const restrict
+			throw (Exception::Overflow, Exception::Underflow) {
+
+			return value * integer.value;
+		}
+
+		Integer operator/(const Integer integer) const restrict
+			throw (Exception::Domain) {
+			if (integer.value == Type(0))
+				throw Exception::Domain();
+
+			return value / integer.value;
+		}
+
+		Integer operator%(const Integer integer) const restrict
+			throw (Exception::Domain) {
+			if (integer.value == Type(0))
+				throw Exception::Domain();
+
+			return value % integer.value;
+		}
+
+		Integer operator+(const Integer integer) const restrict
+			throw (Exception::Overflow, Exception::Underflow) {
+
+			return value + integer.value;
+		}
+
+		Integer operator-(const Integer integer) const restrict
+			throw (Exception::Overflow, Exception::Underflow) {
+
+			return value - integer.value;
+		}
+
+		inline Integer operator<<(const unsigned char shift) const restrict
+			throw () {
+			return value << shift;
+		}
+
+		inline Integer operator>>(const unsigned char shift) const restrict
+			throw () {
+			return value >> shift;
+		}
+
+		inline bool operator<(const Integer integer) const restrict
+			throw () {
+			return value < integer.value;
+		}
+
+		inline bool operator<=(const Integer integer) const restrict
+			throw () {
+			return value <= integer.value;
+		}
+
+		inline bool operator>(const Integer integer) const restrict
+			throw () {
+			return value > integer.value;
+		}
+
+		inline bool operator>=(const Integer integer) const restrict
+			throw () {
+			return value >= integer.value;
+		}
+
+		inline bool operator==(const Integer integer) const restrict
+			throw () {
+			return value == integer.value;
+		}
+
+		inline bool operator!=(const Integer integer) const restrict
+			throw () {
+			return value != integer.value;
+		}
+
+		inline Integer operator&(const Integer integer) const restrict
+			throw () {
+			return value & integer.value;
+		}
+
+		inline Integer operator^(const Integer integer) const restrict
+			throw () {
+			return value & integer.value;
+		}
+
+		inline Integer operator|(const Integer integer) const restrict
+			throw () {
+			return value | integer.value;
+		}
+
+		inline Integer& operator=(const Integer integer) restrict
+			throw () {
+			value = integer.value;
+			return *this;
+		}
+
+		inline Integer& operator+=(const Integer integer) restrict
+			throw (Exception::Overflow, Exception::Underflow) {
+			return *this = *this + integer;
+		}
+
+		inline Integer& operator-=(const Integer integer) restrict
+			throw (Exception::Overflow, Exception::Underflow) {
+			return *this = *this - integer;
+		}
+
+		inline Integer& operator*=(const Integer integer) restrict
+			throw (Exception::Overflow, Exception::Underflow) {
+			return *this = *this * integer;
+		}
+
+		Integer& operator/=(const Integer integer) restrict
+			throw (Exception::Domain) {
+			if (integer.value == Type(0))
+				throw Exception::Domain();
+
+			value /= integer.value;
+			return *this;
+		}
+
+		Integer& operator%=(const Integer integer) restrict
+			throw (Exception::Domain) {
+			if (integer.value == Type(0))
+				throw Exception::Domain();
+
+			value %= integer.value;
+			return *this;
+		}
+
+		inline Integer& operator&=(const Integer integer) restrict
+			throw () {
+			value &= integer.value;
+			return *this;
+		}
+
+		inline Integer& operator^=(const Integer integer) restrict
+			throw () {
+			value ^= integer.value;
+			return *this;
+		}
+
+		inline Integer& operator|=(const Integer integer) restrict
+			throw () {
+			value |= integer.value;
+			return *this;
+		}
+
+		inline Integer& operator<<=(const unsigned char shift) restrict
+			throw () {
+			value <<= shift;
+			return *this;
+		}
+
+		inline Integer& operator>>=(const unsigned char shift) restrict
+			throw () {
+			value >>= shift;
+			return *this;
+		}
+
+		static inline constexpr bool isSigned()
+			throw() {
+			return ~Type(0) < Type(0);
+		}
+
+		static inline constexpr Integer minimum()
+			throw() {
+			return isSigned() ?
+				Type(1) << sizeof (Type) * 8 - 1 :
+				Type(0);
+		}
+
+		static inline constexpr Integer maximum()
+			throw() {
+			return isSigned() ?
+				~(Type(1) << sizeof (Type) * 8 - 1) :
+				~Type(0);
+		}
+
+		inline Integer rotateLeft(const unsigned char shift) const restrict
+			throw() {
+#if defined __x86_64__
+			if (!constexpr(value) || !constexpr(shift)) {
+				register auto result = value;
+				asm ("rol %b1, %0" : "+g" (result) : "ic" (shift & sizeof result * 8 - 1));
+				return result;
+			}
+#endif
+			return
+				  value << (shift & sizeof value * 8 - 1)
+				| value >> (sizeof value * 8 - (shift & sizeof value * 8 - 1));
+		}
+
+		inline Integer rotateRight(const unsigned char shift) const restrict
+			throw() {
+#if defined __x86_64__
+			if (!constexpr(value) || !constexpr(shift)) {
+				register auto result = value;
+				asm ("ror %b1, %0" : "+g" (result) : "ic" (shift & sizeof result * 8 - 1));
+				return result;
+			}
+#endif
+			return
+				  value >> (shift & sizeof value * 8 - 1)
+				| value << (sizeof value * 8 - (shift & sizeof value * 8 - 1));
+		}
+
+		inline Integer unsafeAdd(const Integer integer) const restrict
+			throw() {
+			return value + integer.value;
+		}
+
+		inline Integer unsafeSub(const Integer integer) const restrict
+			throw() {
+			return value - integer.value;
+		}
+
+		inline Integer unsafeMul(const Integer integer) const restrict
+			throw() {
+			return value * integer.value;
+		}
+
+		inline Integer unsafeDiv(const Integer integer) const restrict
+			throw() {
+			return value / integer.value;
+		}
+
+		inline Integer unsafeMod(const Integer integer) const restrict
+			throw() {
+			return value % integer.value;
+		}
+	};
+}
+
+#endif
