@@ -2,14 +2,59 @@
 #ifndef karyon_Integer_SInt32
 #define karyon_Integer_SInt32
 
+#include <Exception/Overflow>
+
 #include <Integer/Integer>
+#include <Integer/SInt64>
+
+#include <unlikely>
 
 namespace Integer {
+	class SInt32
 #if (defined __GNUC__ || defined __clang__) && defined __INT32_TYPE__
-	typedef Integer<__INT32_TYPE__> SInt32;
+#	define SINT32(const) { __INT32_C(const) }
+		: public Integer<__INT32_TYPE__> {
 #else
-	typedef Integer<signed int> SInt32;
+#	define SINT32(const) { const }
+		: public Integer<signed int> {
 #endif
+	public:
+		inline SInt32()
+			throw () {
+		}
+
+		inline SInt32(const Base value)
+			throw ()
+			: Integer(value) {
+		}
+
+		inline SInt32(const SInt32& integer)
+			throw ()
+			: Integer(integer) {
+		}
+
+		SInt32 operator*(const SInt32 multiplier) const restrict
+			throw (Exception::Overflow) {
+			register SInt64::Base product = value * multiplier.value;
+
+			if (unlikely(product > maximum())
+				|| unlikely(product < minimum()))
+				throw Exception::Overflow();
+
+			return static_cast<Base>(product);
+		}
+
+		inline SInt32& operator=(const SInt32 integer) restrict
+			throw () {
+			value = integer.value;
+			return *this;
+		}
+
+		inline SInt32& operator*=(const SInt32 multiplier) restrict
+			throw (Exception::Overflow) {
+			return *this = *this * multiplier;
+		}
+	};
 }
 
 #endif
