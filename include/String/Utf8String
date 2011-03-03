@@ -4,7 +4,7 @@
 
 #include <String/String>
 
-#define UTF8STRING(const) { u8 ## const, sizeof u8 ## const - 1 }
+#define UTF8STRING(const) String::Utf8String({ u8 ## const, sizeof u8 ## const - 1 })
 
 namespace String {
 	//using Utf8String = String<char>;
