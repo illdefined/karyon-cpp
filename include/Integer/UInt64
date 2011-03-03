@@ -6,6 +6,7 @@
 
 #include <Integer/Integer>
 
+#include <constexpr>
 #include <unlikely>
 
 namespace Integer {
@@ -36,6 +37,25 @@ namespace Integer {
 			throw () {
 			value = integer.value;
 			return *this;
+		}
+
+		inline UInt64 byteSwap() const restrict
+			throw () {
+#if defined __GNUC__ || defined __clang__
+			if (!constexpr(value))
+				return __builtin_bswap64(value);
+#endif
+
+			return
+				  (*this & UINT64(0xff00000000000000)) >> 56
+				| (*this & UINT64(0x00ff000000000000)) >> 40
+				| (*this & UINT64(0x0000ff0000000000)) >> 24
+				| (*this & UINT64(0x000000ff00000000)) >>  8
+				| (*this & UINT64(0x00000000ff000000)) <<  8
+				| (*this & UINT64(0x0000000000ff0000)) << 24
+				| (*this & UINT64(0x000000000000ff00)) << 40
+				| (*this & UINT64(0x00000000000000ff)) << 56;
+
 		}
 	};
 }
