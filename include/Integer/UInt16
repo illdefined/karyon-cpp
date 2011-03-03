@@ -53,6 +53,11 @@ namespace Integer {
 			throw (Exception::Overflow) {
 			return *this = *this * multiplier;
 		}
+
+		inline UInt16 byteSwap() const restrict
+			throw () {
+			return this->rotateRight(8);
+		}
 	};
 }
 
