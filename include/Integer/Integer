@@ -230,26 +230,26 @@ namespace Integer {
 		}
 
 		static inline constexpr bool isSigned()
-			throw() {
+			throw () {
 			return ~Type(0) < Type(0);
 		}
 
 		static inline constexpr Type minimum()
-			throw() {
+			throw () {
 			return isSigned() ?
 				Type(1) << sizeof (Type) * 8 - 1 :
 				Type(0);
 		}
 
 		static inline constexpr Type maximum()
-			throw() {
+			throw () {
 			return isSigned() ?
 				~(Type(1) << sizeof (Type) * 8 - 1) :
 				~Type(0);
 		}
 
 		inline Integer rotateLeft(const unsigned char shift) const restrict
-			throw() {
+			throw () {
 #if defined __x86_64__
 			if (!constexpr(value) || !constexpr(shift)) {
 				register auto result = value;
@@ -263,7 +263,7 @@ namespace Integer {
 		}
 
 		inline Integer rotateRight(const unsigned char shift) const restrict
-			throw() {
+			throw () {
 #if defined __x86_64__
 			if (!constexpr(value) || !constexpr(shift)) {
 				register auto result = value;
@@ -277,27 +277,27 @@ namespace Integer {
 		}
 
 		inline Integer unsafeAdd(const Integer integer) const restrict
-			throw() {
+			throw () {
 			return value + integer.value;
 		}
 
 		inline Integer unsafeSub(const Integer integer) const restrict
-			throw() {
+			throw () {
 			return value - integer.value;
 		}
 
 		inline Integer unsafeMul(const Integer integer) const restrict
-			throw() {
+			throw () {
 			return value * integer.value;
 		}
 
 		inline Integer unsafeDiv(const Integer integer) const restrict
-			throw() {
+			throw () {
 			return value / integer.value;
 		}
 
 		inline Integer unsafeMod(const Integer integer) const restrict
-			throw() {
+			throw () {
 			return value % integer.value;
 		}
 	};
