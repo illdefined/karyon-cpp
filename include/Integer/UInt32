@@ -54,6 +54,20 @@ namespace Integer {
 			throw (Exception::Overflow) {
 			return *this = *this * multiplier;
 		}
+
+		inline UInt32 byteSwap() const restrict
+			throw () {
+#if defined __GNUC__ || defined __clang__
+			if (!constexpr(value))
+				return __builtin_bswap32(value);
+#endif
+
+			return
+				  (*this & UINT32(0xff000000)) >> 24
+				| (*this & UINT32(0x00ff0000)) >>  8
+				| (*this & UINT32(0x0000ff00)) <<  8
+				| (*this & UINT32(0x000000ff)) << 24;
+		}
 	};
 }
 
