@@ -12,10 +12,10 @@
 namespace Integer {
 	class UInt8
 #if (defined __GNUC__ || defined __clang__) && defined __UINT8_TYPE__
-#	define UINT8(const) { __UINT8_C(const) }
+#	define UINT8(const) UInt8({ __UINT8_C(const) })
 		: public Integer<__UINT8_TYPE__> {
 #else
-#	define UINT8(const) { const ## U }
+#	define UINT8(const) UInt8({ const ## U })
 		: public Integer<unsigned char> {
 #endif
 	public:

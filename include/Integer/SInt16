@@ -12,10 +12,10 @@
 namespace Integer {
 	class SInt16
 #if (defined __GNUC__ || defined __clang__) && defined __INT16_TYPE__
-#	define SINT16(const) { __INT16_C(const) }
+#	define SINT16(const) SInt16({ __INT16_C(const) })
 		: public Integer<__INT16_TYPE__> {
 #else
-#	define SINT16(const) { const }
+#	define SINT16(const) SInt16({ const })
 		: public Integer<signed short int> {
 #endif
 	public:

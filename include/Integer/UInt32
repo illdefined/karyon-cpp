@@ -7,15 +7,16 @@
 #include <Integer/Integer>
 #include <Integer/UInt64>
 
+#include <constexpr>
 #include <unlikely>
 
 namespace Integer {
 	class UInt32
 #if (defined __GNUC__ || defined __clang__) && defined __UINT32_TYPE__
-#	define UINT32(const) { __UINT32_C(const) }
+#	define UINT32(const) UInt32({ __UINT32_C(const) })
 		: public Integer<__UINT32_TYPE__> {
 #else
-#	define UINT32(const) { const ## U }
+#	define UINT32(const) UInt32({ const ## U })
 		: public Integer<unsigned int> {
 #endif
 	public:

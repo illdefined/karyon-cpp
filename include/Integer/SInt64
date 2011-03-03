@@ -11,10 +11,10 @@
 namespace Integer {
 	class SInt64
 #if (defined __GNUC__ || defined __clang__) && defined __INT64_TYPE__
-#	define SINT64(const) { __INT64_C(const) }
+#	define SINT64(const) SInt64({ __INT64_C(const) })
 		: public Integer<__INT64_TYPE__> {
 #else
-#	define SINT64(const) { const ## LL }
+#	define SINT64(const) SInt64({ const ## LL })
 		: public Integer<signed long long int> {
 #endif
 	public:

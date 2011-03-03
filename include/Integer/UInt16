@@ -12,10 +12,10 @@
 namespace Integer {
 	class UInt16
 #if (defined __GNUC__ || defined __clang__) && defined __UINT16_TYPE__
-#	define UINT16(const) { __UINT16_C(const) }
+#	define UINT16(const) UInt16({ __UINT16_C(const) })
 		: public Integer<__UINT16_TYPE__> {
 #else
-#	define UINT16(const) { const ## U }
+#	define UINT16(const) UInt16({ const ## U })
 		: public Integer<unsigned short int> {
 #endif
 	public:
