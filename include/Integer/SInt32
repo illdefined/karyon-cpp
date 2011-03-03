@@ -12,10 +12,10 @@
 namespace Integer {
 	class SInt32
 #if (defined __GNUC__ || defined __clang__) && defined __INT32_TYPE__
-#	define SINT32(const) SInt32({ __INT32_C(const) })
+#	define SINT32(const) ::Integer::SInt32({ __INT32_C(const) })
 		: public Integer<__INT32_TYPE__> {
 #else
-#	define SINT32(const) SInt32({ const })
+#	define SINT32(const) ::Integer::SInt32({ const })
 		: public Integer<signed int> {
 #endif
 	public:

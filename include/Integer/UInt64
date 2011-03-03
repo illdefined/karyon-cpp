@@ -12,10 +12,10 @@
 namespace Integer {
 	class UInt64
 #if (defined __GNUC__ || defined __clang__) && defined __UINT64_TYPE__
-#	define UINT64(const) UInt64({ __UINT64_C(const) })
+#	define UINT64(const) ::Integer::UInt64({ __UINT64_C(const) })
 		: public Integer<__UINT64_TYPE__> {
 #else
-#	define UINT64(const) UInt64({ const ## ULL })
+#	define UINT64(const) ::Integer::UInt64({ const ## ULL })
 		: public Integer<unsigned long long int> {
 #endif
 	public:

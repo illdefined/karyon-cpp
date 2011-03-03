@@ -12,10 +12,10 @@
 namespace Integer {
 	class SInt8
 #if (defined __GNUC__ || defined __clang__) && defined __INT8_TYPE__
-#	define SINT8(const) SInt8({ __INT8_C(const) })
+#	define SINT8(const) ::Integer::SInt8({ __INT8_C(const) })
 		: public Integer<__INT8_TYPE__> {
 #else
-#	define SINT8(const) SInt8({ const })
+#	define SINT8(const) ::Integer::SInt8({ const })
 		: public Integer<signed char> {
 #endif
 	public:
