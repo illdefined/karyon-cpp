@@ -2,14 +2,58 @@
 #ifndef karyon_Integer_UInt32
 #define karyon_Integer_UInt32
 
+#include <Exception/Overflow>
+
 #include <Integer/Integer>
+#include <Integer/UInt64>
+
+#include <unlikely>
 
 namespace Integer {
+	class UInt32
 #if (defined __GNUC__ || defined __clang__) && defined __UINT32_TYPE__
-	typedef Integer<__UINT32_TYPE__> UInt32;
+#	define UINT32(const) { __UINT32_C(const) }
+		: public Integer<__UINT32_TYPE__> {
 #else
-	typedef Integer<unsigned int> UInt32;
+#	define UINT32(const) { const ## U }
+		: public Integer<unsigned int> {
 #endif
+	public:
+		inline UInt32()
+			throw () {
+		}
+
+		inline UInt32(const Base value)
+			throw ()
+			: Integer(value) {
+		}
+
+		inline UInt32(const UInt32& integer)
+			throw ()
+			: Integer(integer) {
+		}
+
+		UInt32 operator*(const UInt32 multiplier) const restrict
+			throw (Exception::Overflow) {
+			register UInt64::Base product = value * multiplier.value;
+
+			if (unlikely(product > maximum()))
+				throw Exception::Overflow();
+
+			return static_cast<Base>(product);
+		}
+
+		inline UInt32& operator=(const UInt32 integer) restrict
+			throw () {
+			value = integer.value;
+			return *this;
+		}
+
+		inline UInt32& operator*=(const UInt32 multiplier) restrict
+			throw (Exception::Overflow) {
+			return *this = *this * multiplier;
+		}
+	};
 }
 
 #endif
