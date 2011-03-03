@@ -27,7 +27,7 @@ namespace Integer {
 			: Integer(value) {
 		}
 
-		inline SInt64(const SInt64& integer)
+		inline SInt64(const Integer& integer)
 			throw ()
 			: Integer(integer) {
 		}

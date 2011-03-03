@@ -28,7 +28,7 @@ namespace Integer {
 			: Integer(value) {
 		}
 
-		inline UInt32(const UInt32& integer)
+		inline UInt32(const Integer& integer)
 			throw ()
 			: Integer(integer) {
 		}
@@ -40,7 +40,7 @@ namespace Integer {
 			if (unlikely(product > maximum()))
 				throw Exception::Overflow();
 
-			return static_cast<Base>(product);
+			return product;
 		}
 
 		inline UInt32& operator=(const UInt32 integer) restrict

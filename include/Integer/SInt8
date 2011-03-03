@@ -28,7 +28,7 @@ namespace Integer {
 			: Integer(value) {
 		}
 
-		inline SInt8(const SInt8& integer)
+		inline SInt8(const Integer& integer)
 			throw ()
 			: Integer(integer) {
 		}
@@ -41,7 +41,7 @@ namespace Integer {
 				|| unlikely(product < minimum()))
 				throw Exception::Overflow();
 
-			return static_cast<Base>(product);
+			return product;
 		}
 
 		inline SInt8& operator=(const SInt8 integer) restrict

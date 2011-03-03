@@ -27,7 +27,7 @@ namespace Integer {
 			: Integer(value) {
 		}
 
-		inline UInt64(const UInt64& integer)
+		inline UInt64(const Integer& integer)
 			throw ()
 			: Integer(integer) {
 		}
