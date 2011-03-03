@@ -67,12 +67,6 @@ namespace Integer {
 			return *this -= Integer(1);
 		}
 
-		Integer operator*(const Integer integer) const restrict
-			throw (Exception::Overflow) {
-
-			return value * integer.value;
-		}
-
 		Integer operator/(const Integer integer) const restrict
 			throw (Exception::Domain) {
 			if (unlikely(integer.value == Type(0)))
