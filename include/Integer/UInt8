@@ -2,14 +2,58 @@
 #ifndef karyon_Integer_UInt8
 #define karyon_Integer_UInt8
 
+#include <Exception/Overflow>
+
 #include <Integer/Integer>
+#include <Integer/UInt16>
+
+#include <unlikely>
 
 namespace Integer {
+	class UInt8
 #if (defined __GNUC__ || defined __clang__) && defined __UINT8_TYPE__
-	typedef Integer<__UINT8_TYPE__> UInt8;
+#	define UINT8(const) { __UINT8_C(const) }
+		: public Integer<__UINT8_TYPE__> {
 #else
-	typedef Integer<unsigned char> UInt8;
+#	define UINT8(const) { const ## U }
+		: public Integer<unsigned char> {
 #endif
+	public:
+		inline UInt8()
+			throw () {
+		}
+
+		inline UInt8(const Base value)
+			throw ()
+			: Integer(value) {
+		}
+
+		inline UInt8(const UInt8& integer)
+			throw ()
+			: Integer(integer) {
+		}
+
+		UInt8 operator*(const UInt8 multiplier) const restrict
+			throw (Exception::Overflow) {
+			register UInt16::Base product = value * multiplier.value;
+
+			if (unlikely(product > maximum()))
+				throw Exception::Overflow();
+
+			return static_cast<Base>(product);
+		}
+
+		inline UInt8& operator=(const UInt8 integer) restrict
+			throw () {
+			value = integer.value;
+			return *this;
+		}
+
+		inline UInt8& operator*=(const UInt8 multiplier) restrict
+			throw (Exception::Overflow) {
+			return *this = *this * multiplier;
+		}
+	};
 }
 
 #endif
