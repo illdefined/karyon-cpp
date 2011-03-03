@@ -2,7 +2,7 @@ CXX      ?= clang++
 CPP      ?= $(CC) -E
 
 CPPFLAGS := -std=c++0x -nostdinc -Iinclude -ftabstop=4
-CXXFLAGS := -pipe -ffreestanding -Wall -O2
+CXXFLAGS := -pipe -ffreestanding -Wall -Wno-parentheses -O2
 CXXFLAGS += -fmerge-all-constants -fstrict-overflow -fwhole-program -freg-struct-return -fshort-enums
 LDFLAGS  := -nostdlib -static
 
