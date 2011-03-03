@@ -2,14 +2,42 @@
 #ifndef karyon_Integer_SInt64
 #define karyon_Integer_SInt64
 
+#include <Exception/Overflow>
+
 #include <Integer/Integer>
 
+#include <unlikely>
+
 namespace Integer {
+	class SInt64
 #if (defined __GNUC__ || defined __clang__) && defined __INT64_TYPE__
-	typedef Integer<__INT64_TYPE__> SInt64;
+#	define SINT64(const) { __INT64_C(const) }
+		: public Integer<__INT64_TYPE__> {
 #else
-	typedef Integer<signed long long int> SInt64;
+#	define SINT64(const) { const ## LL }
+		: public Integer<signed long long int> {
 #endif
+	public:
+		inline SInt64()
+			throw () {
+		}
+
+		inline SInt64(const Base value)
+			throw ()
+			: Integer(value) {
+		}
+
+		inline SInt64(const SInt64& integer)
+			throw ()
+			: Integer(integer) {
+		}
+
+		inline SInt64& operator=(const SInt64 integer) restrict
+			throw () {
+			value = integer.value;
+			return *this;
+		}
+	};
 }
 
 #endif
