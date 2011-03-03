@@ -2,14 +2,58 @@
 #ifndef karyon_Integer_UInt16
 #define karyon_Integer_UInt16
 
+#include <Exception/Overflow>
+
 #include <Integer/Integer>
+#include <Integer/UInt32>
+
+#include <unlikely>
 
 namespace Integer {
+	class UInt16
 #if (defined __GNUC__ || defined __clang__) && defined __UINT16_TYPE__
-	typedef Integer<__UINT16_TYPE__> UInt16;
+#	define UINT16(const) { __UINT16_C(const) }
+		: public Integer<__UINT16_TYPE__> {
 #else
-	typedef Integer<unsigned short int> UInt16;
+#	define UINT16(const) { const ## U }
+		: public Integer<unsigned short int> {
 #endif
+	public:
+		inline UInt16()
+			throw () {
+		}
+
+		inline UInt16(const Base value)
+			throw ()
+			: Integer(value) {
+		}
+
+		inline UInt16(const UInt16& integer)
+			throw ()
+			: Integer(integer) {
+		}
+
+		UInt16 operator*(const UInt16 multiplier) const restrict
+			throw (Exception::Overflow) {
+			register UInt32::Base product = value * multiplier.value;
+
+			if (unlikely(product > maximum()))
+				throw Exception::Overflow();
+
+			return static_cast<Base>(product);
+		}
+
+		inline UInt16& operator=(const UInt16 integer) restrict
+			throw () {
+			value = integer.value;
+			return *this;
+		}
+
+		inline UInt16& operator*=(const UInt16 multiplier) restrict
+			throw (Exception::Overflow) {
+			return *this = *this * multiplier;
+		}
+	};
 }
 
 #endif
