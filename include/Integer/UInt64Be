@@ -1,0 +1,54 @@
+#pragma once
+#ifndef karyon_Integer_UInt64Be
+#define karyon_Integer_UInt64Be
+
+#include <Integer/UInt64>
+
+namespace Integer {
+	class UInt64Be
+		: protected UInt64 {
+	public:
+		inline UInt64Be()
+			throw () {
+		}
+
+		explicit inline UInt64Be(const Base value)
+			throw ()
+			: UInt64(value) {
+		}
+
+		inline UInt64Be(const UInt64Be& integer)
+			throw ()
+			: UInt64(integer) {
+		}
+
+		explicit inline UInt64Be(const UInt64& integer)
+			throw ()
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+			: UInt64(integer) {
+#else
+			: UInt64(integer.byteSwap()) {
+#endif
+		}
+
+		explicit inline operator UInt64() const restrict
+			throw () {
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+			return *this;
+#else
+			return this->byteSwap();
+#endif
+		}
+
+		inline UInt64Be& operator=(const UInt64 integer)
+			throw () {
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+			return *this = integer;
+#else
+			return *this = integer.byteSwap();
+#endif
+		}
+	};
+}
+
+#endif

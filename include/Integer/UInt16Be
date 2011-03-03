@@ -1,0 +1,54 @@
+#pragma once
+#ifndef karyon_Integer_UInt16Be
+#define karyon_Integer_UInt16Be
+
+#include <Integer/UInt16>
+
+namespace Integer {
+	class UInt16Be
+		: protected UInt16 {
+	public:
+		inline UInt16Be()
+			throw () {
+		}
+
+		explicit inline UInt16Be(const Base value)
+			throw ()
+			: UInt16(value) {
+		}
+
+		inline UInt16Be(const UInt16Be& integer)
+			throw ()
+			: UInt16(integer) {
+		}
+
+		explicit inline UInt16Be(const UInt16& integer)
+			throw ()
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+			: UInt16(integer) {
+#else
+			: UInt16(integer.byteSwap()) {
+#endif
+		}
+
+		explicit inline operator UInt16() const restrict
+			throw () {
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+			return *this;
+#else
+			return this->byteSwap();
+#endif
+		}
+
+		inline UInt16Be& operator=(const UInt16 integer)
+			throw () {
+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+			return *this = integer;
+#else
+			return *this = integer.byteSwap();
+#endif
+		}
+	};
+}
+
+#endif
