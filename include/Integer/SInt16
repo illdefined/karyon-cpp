@@ -15,7 +15,7 @@ namespace Integer {
 #	define SINT16(const) { __INT16_C(const) }
 		: public Integer<__INT16_TYPE__> {
 #else
-#	define SINT16(const) { const ## U }
+#	define SINT16(const) { const }
 		: public Integer<signed short int> {
 #endif
 	public:
