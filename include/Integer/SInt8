@@ -15,7 +15,7 @@ namespace Integer {
 #	define SINT8(const) { __INT8_C(const) }
 		: public Integer<__INT8_TYPE__> {
 #else
-#	define SINT8(const) { const ## U }
+#	define SINT8(const) { const }
 		: public Integer<signed char> {
 #endif
 	public:
